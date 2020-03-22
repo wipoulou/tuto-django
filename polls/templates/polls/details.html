@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="offset-md-3 col-md-6">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                {{question}}
+            </div>
+            <div class="card-body">
+                <div>
+                    Votes totaux : {{question.get_total}}
+                </div>
+                <form action="{% url 'polls:vote' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="question_id" value="{{question.id}}">
+                    <ul class="list-unstyled">
+                    {% for choice in question.choices.all %}
+                        <li>
+                            <button
+                                class="btn bg-secondary text-white mt-2 w-100"
+                                type='submit'
+                                name="choice_id"
+                                value="{{choice.id}}">
+                                {{choice}}
+                            </button>
+                        </li>
+                    {% endfor %}
+                        <li>
+                            <div class="input-group mb-2 mr-sm-2">
+                                <input
+                                    class="form-control mt-2 w-100"
+                                    type='text'
+                                    name="new_choice"
+                                    placeholder="Nouveau choix">
+                                <button
+                                    class="btn btn-dark mt-2"
+                                    type="submit"
+                                    name="choice_id"
+                                    value="_">
+                                    +
+                                </button>
+                            </div>
+                        </li>
+                    </ul>
+                </form>
+                <div class="text-right">
+                    <a href="{% url 'polls:results' question.id %}" class="btn btn-primary">Voir résultats</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
